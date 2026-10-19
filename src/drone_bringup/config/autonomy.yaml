@@ -24,7 +24,7 @@ frontier_explorer:
     use_sim_time: true
     flight_altitude_m: 2.5
     inflation_radius_m: 0.65
-    min_frontier_cells: 6
+    min_frontier_cells: 3
     min_frontier_distance_m: 1.0
     replan_period_s: 2.0
     path_stride_cells: 2

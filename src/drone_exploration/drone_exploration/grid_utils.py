@@ -77,7 +77,14 @@ def cluster_mask(mask: np.ndarray, min_size: int = 4) -> list[list[tuple[int, in
             while q:
                 cx, cy = q.popleft()
                 cluster.append((cx, cy))
-                for nx, ny in ((cx + 1, cy), (cx - 1, cy), (cx, cy + 1), (cx, cy - 1)):
+                # Frontier boundaries are frequently diagonal in projected
+                # occupancy grids, so cluster with 8-connectivity.
+                for dx, dy in (
+                    (-1, -1), (0, -1), (1, -1),
+                    (-1,  0),           (1,  0),
+                    (-1,  1), (0,  1), (1,  1),
+                ):
+                    nx, ny = cx + dx, cy + dy
                     if 0 <= nx < w and 0 <= ny < h and mask[ny, nx] and not seen[ny, nx]:
                         seen[ny, nx] = True
                         q.append((nx, ny))
@@ -88,8 +95,23 @@ def cluster_mask(mask: np.ndarray, min_size: int = 4) -> list[list[tuple[int, in
 
 def nearest_free_cell(grid: np.ndarray, start: tuple[int, int], blocked: np.ndarray | None = None):
     """Breadth-first search for a traversable known-free cell."""
-    if not in_bounds(grid, start):
+    # OctoMap's projected map is dynamically bounded. The vehicle can sit a
+    # few millimetres outside the current grid origin, which world_to_grid()
+    # represents as -1 (or width/height at the opposite edge). Accept a
+    # one-cell boundary drift and clamp it to the nearest map cell.
+    if grid.ndim != 2 or grid.size == 0:
         return None
+
+    h, w = grid.shape
+    sx, sy = start
+    if sx < -1 or sx > w or sy < -1 or sy > h:
+        return None
+
+    start = (
+        min(max(sx, 0), w - 1),
+        min(max(sy, 0), h - 1),
+    )
+
     if blocked is None:
         blocked = np.zeros_like(grid, dtype=bool)
     q = deque([start])

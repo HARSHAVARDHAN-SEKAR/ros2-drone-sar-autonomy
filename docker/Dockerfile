@@ -38,6 +38,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && /opt/venv/bin/python -m pip install --no-cache-dir "ultralytics>=8.2,<9" \
     && rm -rf /var/lib/apt/lists/* /root/.cache/pip
 
+# ROS Humble cv_bridge is built against the NumPy 1.x ABI.
+# Ultralytics may otherwise pull OpenCV 4.12+ and NumPy 2.x.
+RUN /opt/venv/bin/python -m pip install --no-cache-dir --force-reinstall \
+      "numpy==1.26.4" \
+      "opencv-python==4.11.0.86"
+
 # Match the host UID/GID so bind-mounted workspace files remain owned by the user.
 RUN if getent group "${USER_GID}" >/dev/null; then \
       EXISTING_GROUP="$(getent group "${USER_GID}" | cut -d: -f1)"; \
@@ -54,6 +60,7 @@ RUN chmod +x /usr/local/bin/drone-entrypoint
 
 ENV PATH=/opt/venv/bin:$PATH \
     VIRTUAL_ENV=/opt/venv \
+    PYTHONPATH=/opt/venv/lib/python3.10/site-packages \
     ROS_DISTRO=humble \
     ROS_DOMAIN_ID=42 \
     RCUTILS_COLORIZED_OUTPUT=1 \

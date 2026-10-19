@@ -68,7 +68,7 @@ def generate_launch_description():
         DeclareLaunchArgument('gz_rgb_image_topic', default_value=default_rgb),
         DeclareLaunchArgument('gz_rgb_info_topic', default_value=default_rgb_info),
         DeclareLaunchArgument('gz_depth_image_topic', default_value='/depth_camera'),
-        DeclareLaunchArgument('gz_depth_info_topic', default_value='/depth_camera/camera_info'),
+        DeclareLaunchArgument('gz_depth_info_topic', default_value='/camera_info'),
         SetParameter(name='use_sim_time', value=LaunchConfiguration('use_sim_time')),
 
         IncludeLaunchDescription(

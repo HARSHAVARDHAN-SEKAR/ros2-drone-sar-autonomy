@@ -16,6 +16,8 @@ fi
 
 docker compose up -d ros px4
 
+./scripts/configure_px4_sitl.sh
+
 echo "Containers started."
 echo "PX4 logs:  docker compose logs -f px4"
 echo "ROS shell: ./scripts/docker_shell.sh"

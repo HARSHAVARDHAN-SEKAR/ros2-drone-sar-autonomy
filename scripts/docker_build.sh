@@ -16,11 +16,11 @@ docker compose run --rm ros bash -lc '
   set -eo pipefail
   source /opt/ros/humble/setup.bash
   rosdep update
-  rosdep install --from-paths src --ignore-src -r -y --skip-keys=ros_gz_bridge
+  rosdep install --from-paths src --ignore-src -r -y --skip-keys="ros_gz_bridge ament_python"
   colcon build --symlink-install
   source install/setup.bash
   python3 scripts/validate_workspace.py
-  pytest -q src/drone_exploration/test src/drone_perception/test
+  /opt/venv/bin/python -m pytest -q src/drone_exploration/test src/drone_perception/test
 '
 
 echo "Docker image and ROS workspace build completed successfully."

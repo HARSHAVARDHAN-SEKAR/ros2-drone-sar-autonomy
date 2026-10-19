@@ -12,6 +12,7 @@ services:
       HEADLESS: ${HEADLESS-1}
       DISPLAY: ${DISPLAY:-:0}
       QT_X11_NO_MITSHM: "1"
+      GZ_PARTITION: ${GZ_PARTITION:-drone_sar}
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - px4_state:/root/.local/share
@@ -33,6 +34,7 @@ services:
       ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-42}
       RCUTILS_COLORIZED_OUTPUT: "1"
       QT_X11_NO_MITSHM: "1"
+      GZ_PARTITION: ${GZ_PARTITION:-drone_sar}
     volumes:
       - .:/workspace:rw
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
