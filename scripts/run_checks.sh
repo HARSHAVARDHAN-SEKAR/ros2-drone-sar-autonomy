@@ -4,7 +4,7 @@ cd "$(dirname "$0")/.."
 
 python3 scripts/validate_workspace.py
 PYTHONPATH="$PWD/src/drone_exploration:$PWD/src/drone_perception" \
-  pytest -q src/drone_exploration/test src/drone_perception/test
+  python3 -m pytest -q src/drone_exploration/test src/drone_perception/test
 
 for f in install_deps.sh docker/entrypoint.sh scripts/*.sh; do
   bash -n "$f"
