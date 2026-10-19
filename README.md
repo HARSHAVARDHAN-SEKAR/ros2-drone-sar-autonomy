@@ -185,32 +185,65 @@ bash scripts/ros_smoke_check.sh
 
 See [`docs/TEST_PLAN.md`](docs/TEST_PLAN.md) for the staged acceptance plan and [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for design details.
 
-## Suggested GitHub repository name
+## End-to-End Runtime Validation
 
-`ros2-drone-sar-autonomy`
+The complete autonomous search-and-rescue mission was validated in
+PX4 SITL, Gazebo Harmonic and ROS 2 Humble.
 
-Suggested description:
+### Demonstrated mission sequence
 
-> Simulation-first autonomous SAR drone stack with PX4, ROS 2, Gazebo Harmonic, MAVROS, OctoMap, frontier exploration, A* planning, depth perception and YOLO victim-candidate detection.
+`IDLE → TAKEOFF → EXPLORE → INSPECT → RETURN → COMPLETE`
 
-Suggested topics:
+The recorded run demonstrated:
 
-`ros2`, `px4`, `gazebo`, `mavros`, `uav`, `drone`, `autonomous-drone`, `octomap`, `path-planning`, `computer-vision`, `yolo`, `robotics`, `search-and-rescue`
+- PX4 OFFBOARD transition and autonomous arming
+- autonomous takeoff
+- RGB-D sensing and depth-to-point-cloud conversion
+- OctoMap environment mapping
+- frontier-based autonomous exploration
+- A* path generation
+- autonomous PX4 path following
+- YOLO person detection
+- depth-based victim-candidate range estimation
+- victim localization in the `map` frame
+- inspection hold
+- PX4 AUTO.RTL
+- landing and disarming
+- completed mission state
 
-## License
+### Demo Video
 
-MIT. PX4, MAVROS, Gazebo, Ultralytics and other dependencies retain their own licenses.
+[▶ Watch the 1080p end-to-end SAR demo](assets/demo/ROS2_Drone_SAR_End_to_End_Demo.mp4)
 
-## Portfolio demo / LinkedIn
+![Autonomous exploration](assets/demo/video_exploration.jpg)
 
-For a recruiter-facing recording, follow [`docs/DEMO_RECORDING.md`](docs/DEMO_RECORDING.md). It provides a 60–90 second shot list and the exact ROS evidence to show on screen.
+![Victim detection](assets/demo/video_victim.jpg)
 
-You can also run:
+### Validation Report
 
-```bash
-./scripts/demo_evidence.sh
-```
+[📄 Runtime Validation Report](docs/validation/ROS2_Drone_SAR_Runtime_Validation_Report.pdf)
 
-to print a compact Docker + MAVROS + sensor + mission-status evidence snapshot during testing.
+### Measured Validation Evidence
 
-See [`docs/LINKEDIN_RELEASE.md`](docs/LINKEDIN_RELEASE.md) for claims that are appropriate before and after end-to-end runtime validation.
+![Mission phase timeline](docs/validation/mission_phase_timeline.png)
+
+![Frontier planning outputs](docs/validation/frontier_planning_outputs.png)
+
+![Victim detection confidence](docs/validation/victim_detection_confidence.png)
+
+Machine-readable evidence:
+
+- [Mission transitions](docs/validation/mission_transitions.csv)
+- [Frontier plans](docs/validation/frontier_plans.csv)
+- [Victim detections](docs/validation/victim_detections_latest_run.csv)
+- [Validation summary](docs/validation/validation_summary.json)
+
+### Automated Validation
+
+The current GitHub Actions validation reports:
+
+```text
+9 passed
+Docker metadata checks passed.
+Docker Compose semantic validation passed.
+All non-ROS static/unit checks passed.
