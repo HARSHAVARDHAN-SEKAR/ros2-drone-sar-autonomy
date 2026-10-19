@@ -1,0 +1,70 @@
+flight_controller:
+  ros__parameters:
+    use_sim_time: true
+    setpoint_rate_hz: 20.0
+    prestream_seconds: 1.5
+    takeoff_altitude: 2.5
+    takeoff_tolerance: 0.20
+    waypoint_tolerance: 0.35
+    service_retry_seconds: 1.0
+    path_lookahead_index: 1
+
+mission_manager:
+  ros__parameters:
+    use_sim_time: true
+    auto_start: false
+    takeoff_altitude_m: 2.5
+    takeoff_tolerance_m: 0.30
+    inspection_hold_s: 4.0
+    exploration_timeout_s: 300.0
+    mission_timeout_s: 420.0
+
+frontier_explorer:
+  ros__parameters:
+    use_sim_time: true
+    flight_altitude_m: 2.5
+    inflation_radius_m: 0.65
+    min_frontier_cells: 6
+    min_frontier_distance_m: 1.0
+    replan_period_s: 2.0
+    path_stride_cells: 2
+    max_astar_expansions: 80000
+    empty_frontier_cycles_to_complete: 5
+
+victim_detector:
+  ros__parameters:
+    use_sim_time: true
+    model_path: yolov8n.pt
+    confidence: 0.65
+    iou: 0.45
+    depth_roi_px: 8
+    min_depth: 0.25
+    max_depth: 8.0
+    dedup_radius_m: 1.25
+    world_frame: map
+    camera_frame: camera_optical_frame
+    device: ''
+
+depth_to_cloud:
+  ros__parameters:
+    use_sim_time: true
+    min_depth: 0.25
+    max_depth: 8.0
+    downsample: 4
+    output_frame: camera_optical_frame
+
+safety_monitor:
+  ros__parameters:
+    use_sim_time: true
+    battery_rth_percent: 25.0
+    battery_land_percent: 15.0
+    geofence_radius_m: 40.0
+    max_altitude_m: 20.0
+    event_cooldown_s: 5.0
+
+drone_tf_bridge:
+  ros__parameters:
+    use_sim_time: true
+    map_frame: map
+    base_frame: base_link
+    publish_rate_hz: 50.0

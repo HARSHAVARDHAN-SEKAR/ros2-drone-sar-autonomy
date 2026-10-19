@@ -1,0 +1,16 @@
+octomap_server:
+  ros__parameters:
+    use_sim_time: true
+    frame_id: map
+    base_frame_id: base_link
+    resolution: 0.15
+    sensor_model.max_range: 8.0
+    sensor_model.hit: 0.70
+    sensor_model.miss: 0.40
+    occupancy_min_z: 0.15
+    occupancy_max_z: 4.5
+    point_cloud_min_z: -20.0
+    point_cloud_max_z: 20.0
+    filter_speckles: true
+    filter_ground_plane: false
+    latch: true

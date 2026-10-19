@@ -1,0 +1,19 @@
+name: static-ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  static-and-unit-tests:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install test dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pytest python3-yaml python3-numpy
+      - name: Repository checks
+        run: bash scripts/run_checks.sh
+      - name: Docker Compose validation
+        run: docker compose config --quiet

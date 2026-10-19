@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="x500_depth_ros_visual">
+  <!-- RViz/TF-only representation. It is intentionally NOT spawned in Gazebo. -->
+
+  <material name="dark"><color rgba="0.15 0.15 0.18 1"/></material>
+  <material name="accent"><color rgba="0.15 0.35 0.75 1"/></material>
+  <material name="camera"><color rgba="0.05 0.05 0.05 1"/></material>
+
+  <link name="base_link">
+    <visual>
+      <geometry><box size="0.28 0.28 0.08"/></geometry>
+      <material name="dark"/>
+    </visual>
+  </link>
+
+  <xacro:macro name="arm" params="name x y yaw">
+    <joint name="${name}_arm_joint" type="fixed">
+      <parent link="base_link"/><child link="${name}_arm"/>
+      <origin xyz="${x} ${y} 0" rpy="0 0 ${yaw}"/>
+    </joint>
+    <link name="${name}_arm">
+      <visual>
+        <origin xyz="0.10 0 0"/>
+        <geometry><box size="0.20 0.025 0.02"/></geometry>
+        <material name="accent"/>
+      </visual>
+    </link>
+  </xacro:macro>
+
+  <xacro:arm name="front_left"  x="0.08"  y="0.08"  yaw="0.785398"/>
+  <xacro:arm name="front_right" x="0.08"  y="-0.08" yaw="-0.785398"/>
+  <xacro:arm name="rear_left"   x="-0.08" y="0.08"  yaw="2.356194"/>
+  <xacro:arm name="rear_right"  x="-0.08" y="-0.08" yaw="-2.356194"/>
+
+  <!-- Matches PX4-gazebo-models x500_depth + OakD-Lite sensor pose. -->
+  <joint name="camera_mount_joint" type="fixed">
+    <parent link="base_link"/><child link="camera_link"/>
+    <origin xyz="0.12 0.03 0.242" rpy="0 0 0"/>
+  </joint>
+  <link name="camera_link">
+    <visual>
+      <geometry><box size="0.025 0.09 0.03"/></geometry>
+      <material name="camera"/>
+    </visual>
+  </link>
+
+  <joint name="camera_sensor_joint" type="fixed">
+    <parent link="camera_link"/><child link="camera_sensor_link"/>
+    <origin xyz="0.01233 -0.03 0.01878" rpy="0 0 0"/>
+  </joint>
+  <link name="camera_sensor_link"/>
+
+  <!-- REP-103 optical frame: z forward, x right, y down. -->
+  <joint name="camera_optical_joint" type="fixed">
+    <parent link="camera_sensor_link"/><child link="camera_optical_frame"/>
+    <origin xyz="0 0 0" rpy="-1.57079632679 0 -1.57079632679"/>
+  </joint>
+  <link name="camera_optical_frame"/>
+</robot>

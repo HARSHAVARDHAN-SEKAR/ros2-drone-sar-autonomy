@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>drone_bringup</name>
+  <version>0.2.0</version>
+  <description>Launch and configuration for the ROS 2 PX4 SAR autonomy stack.</description>
+  <maintainer email="harshasekar.09@gmail.com">Harshavardhan Coimbatore Sekar</maintainer>
+  <license>MIT</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <exec_depend>ament_index_python</exec_depend>
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>mavros</exec_depend>
+  <exec_depend>ros_gz_bridge</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>rosgraph_msgs</exec_depend>
+  <exec_depend>octomap_server</exec_depend>
+  <exec_depend>drone_description</exec_depend>
+  <exec_depend>drone_control</exec_depend>
+  <exec_depend>drone_exploration</exec_depend>
+  <exec_depend>drone_mission</exec_depend>
+  <exec_depend>drone_perception</exec_depend>
+  <export><build_type>ament_cmake</build_type></export>
+</package>

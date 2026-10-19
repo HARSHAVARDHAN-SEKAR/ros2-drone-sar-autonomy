@@ -1,0 +1,40 @@
+Panels:
+  - Class: rviz_common/Displays
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Alpha: 0.7
+      Cell Size: 1
+      Class: rviz_default_plugins/Grid
+      Name: Grid
+      Plane: XY
+      Value: true
+    - Class: rviz_default_plugins/RobotModel
+      Description Topic:
+        Value: /robot_description
+      Name: Drone
+      Value: true
+    - Class: rviz_default_plugins/Map
+      Name: Projected Map
+      Topic:
+        Value: /projected_map
+      Value: true
+    - Class: rviz_default_plugins/Path
+      Name: Autonomy Path
+      Topic:
+        Value: /autonomy/path
+      Value: true
+    - Class: rviz_default_plugins/PoseArray
+      Name: Victim Candidates
+      Topic:
+        Value: /victims/poses
+      Value: true
+  Global Options:
+    Fixed Frame: map
+  Name: root
+  Tools:
+    - Class: rviz_default_plugins/Interact
+  Value: true
+Window Geometry:
+  Height: 900
+  Width: 1400

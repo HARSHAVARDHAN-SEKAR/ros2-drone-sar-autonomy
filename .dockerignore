@@ -1,0 +1,13 @@
+.git
+.github
+build
+install
+log
+results
+*.bag
+*.db3
+*.mcap
+__pycache__
+.pytest_cache
+*.pyc
+.env

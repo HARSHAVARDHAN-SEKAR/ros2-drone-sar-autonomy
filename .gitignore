@@ -1,0 +1,34 @@
+# ROS / colcon
+build/
+install/
+log/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# ML weights and generated assets
+*.pt
+*.onnx
+*.engine
+runs/
+
+# ROS bags / maps / logs
+*.bag
+*.db3
+*.mcap
+*.bt
+*.ot
+*.pgm
+*.yaml.bak
+rosbags/
+results/raw/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+*~
