@@ -247,3 +247,26 @@ The current GitHub Actions validation reports:
 Docker metadata checks passed.
 Docker Compose semantic validation passed.
 All non-ROS static/unit checks passed.
+```
+
+Run locally with:
+
+```bash
+bash scripts/run_checks.sh
+```
+
+### Reproducing the SAR Scenario
+
+The simulated victim actors can be spawned with:
+
+```bash
+./scripts/spawn_victims.sh
+```
+
+Then launch the autonomy stack and start the mission using the Docker workflow documented above.
+
+> **Scope:** This is a simulation-first robotics research and portfolio project. YOLO confidence is model confidence, not a measured detection-accuracy metric. No real-world flight certification or hardware-flight validation is claimed.
+
+## License
+
+MIT. PX4, MAVROS, Gazebo, Ultralytics and other dependencies retain their respective licenses.
