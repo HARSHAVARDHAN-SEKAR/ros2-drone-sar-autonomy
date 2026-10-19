@@ -12,7 +12,7 @@ done
 echo "[OK] PX4 and ROS containers are running."
 
 docker compose exec ros bash -lc '
-  set -euo pipefail
+  set -eo pipefail
   source /opt/ros/humble/setup.bash
   source /workspace/install/setup.bash
   ros2 pkg prefix drone_bringup >/dev/null

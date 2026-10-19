@@ -8,7 +8,7 @@ if [[ ! -f install/setup.bash ]]; then
 fi
 
 docker compose exec ros bash -lc '
-  set -euo pipefail
+  set -eo pipefail
   source /opt/ros/humble/setup.bash
   source /workspace/install/setup.bash
   ros2 launch drone_bringup full.launch.py

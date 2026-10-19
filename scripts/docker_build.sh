@@ -13,7 +13,7 @@ docker compose build ros
 
 echo "[2/2] Building the ROS 2 workspace inside the container..."
 docker compose run --rm ros bash -lc '
-  set -euo pipefail
+  set -eo pipefail
   source /opt/ros/humble/setup.bash
   rosdep update
   rosdep install --from-paths src --ignore-src -r -y --skip-keys=ros_gz_bridge
