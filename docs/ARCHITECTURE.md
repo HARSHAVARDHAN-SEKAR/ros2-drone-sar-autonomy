@@ -30,7 +30,7 @@ The repository uses two Linux containers with host networking:
 ```text
 Host Ubuntu + Docker
 ├── px4 service
-│   └── official px4io/px4-sitl-gazebo:v1.17.0
+│   └── official px4io/px4-sitl-gazebo:v1.17.0-alpha1-1551-g381149fb01
 │       ├── PX4 SITL
 │       ├── Gazebo Harmonic
 │       └── x500_depth + OAK-D simulation

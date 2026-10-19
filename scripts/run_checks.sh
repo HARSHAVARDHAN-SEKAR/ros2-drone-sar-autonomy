@@ -17,7 +17,7 @@ import yaml
 
 compose = yaml.safe_load(Path('compose.yaml').read_text())
 assert set(compose['services']) == {'px4', 'ros'}
-assert compose['services']['px4']['image'] == 'px4io/px4-sitl-gazebo:v1.17.0'
+assert compose['services']['px4']['image'] == 'px4io/px4-sitl-gazebo:v1.17.0-alpha1-1551-g381149fb01'
 assert compose['services']['px4']['network_mode'] == 'host'
 assert compose['services']['ros']['network_mode'] == 'host'
 json.loads(Path('.devcontainer/devcontainer.json').read_text())

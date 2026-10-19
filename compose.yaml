@@ -2,7 +2,7 @@ name: ros2-drone-sar-autonomy
 
 services:
   px4:
-    image: px4io/px4-sitl-gazebo:v1.17.0
+    image: px4io/px4-sitl-gazebo:v1.17.0-alpha1-1551-g381149fb01
     network_mode: host
     stdin_open: true
     tty: true

@@ -14,7 +14,7 @@ echo
 echo "=== ROS/PX4 evidence ==="
 "${compose[@]}" exec -T ros bash -lc '
   source /opt/ros/humble/setup.bash
-  [ -f /ws/install/setup.bash ] && source /ws/install/setup.bash
+  [ -f /workspace/install/setup.bash ] && source /workspace/install/setup.bash
   echo "-- MAVROS state --"
   timeout 8 ros2 topic echo /mavros/state --once || true
   echo "-- Mission state --"

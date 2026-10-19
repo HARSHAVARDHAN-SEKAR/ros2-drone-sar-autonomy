@@ -4,7 +4,7 @@ This repository is Docker-first on Linux. The host only needs Docker Engine, Doc
 
 ## Container split
 
-- `px4`: official `px4io/px4-sitl-gazebo:v1.17.0`, running PX4 SITL + Gazebo Harmonic with `gz_x500_depth`.
+- `px4`: official `px4io/px4-sitl-gazebo:v1.17.0-alpha1-1551-g381149fb01`, running PX4 SITL + Gazebo Harmonic with `gz_x500_depth`.
 - `ros`: project image based on ROS 2 Humble / Ubuntu 22.04 with MAVROS, OctoMap, ROS↔Gazebo Harmonic bridge, RViz, OpenCV, and Ultralytics.
 
 Both services use host networking. This is deliberate: PX4 MAVLink UDP and Gazebo Transport discovery work without fragile container-to-container port/address rewriting. The supported target for this workflow is Linux.

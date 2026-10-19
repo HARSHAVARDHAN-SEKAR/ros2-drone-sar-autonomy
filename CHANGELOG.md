@@ -28,3 +28,11 @@
 - Added evidence collection helper for Docker/MAVROS/ROS topics.
 - Added recruiter-facing release notes and honest-claims checklist.
 - Added demo-asset directory guidance.
+
+## v0.4.1 - Runtime Docker fixes — 2026-10-19
+
+- Replaced the unavailable `px4io/px4-sitl-gazebo:v1.17.0` reference with the published `px4io/px4-sitl-gazebo:v1.17.0-alpha1-1551-g381149fb01` image tag.
+- Isolated Ultralytics/PyTorch in `/opt/venv` to avoid pip modifying Ubuntu/ROS system Python packages.
+- Installed CPU-only PyTorch wheels for a smaller, CUDA-independent development image.
+- Corrected `demo_evidence.sh` workspace path from `/ws` to `/workspace`.
+- Updated Docker validation and documentation to match the runtime-tested image reference.

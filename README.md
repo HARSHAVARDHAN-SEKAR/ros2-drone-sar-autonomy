@@ -52,7 +52,7 @@ flowchart TD
 |---|---|
 | Ubuntu | 22.04 LTS |
 | ROS 2 | Humble |
-| PX4 | v1.17.x stable |
+| PX4 | pinned Gazebo SITL snapshot `v1.17.0-alpha1-1551-g381149fb01` |
 | Gazebo | Harmonic |
 | MAVROS | ROS 2 branch / Humble binary |
 | Vehicle | PX4 `gz_x500_depth` |
@@ -78,10 +78,12 @@ The project is Docker-first on Linux. You do **not** need to install ROS 2, PX4,
 
 The Compose stack has two services:
 
-- `px4`: official `px4io/px4-sitl-gazebo:v1.17.0` running PX4 SITL + Gazebo Harmonic.
+- `px4`: official `px4io/px4-sitl-gazebo:v1.17.0-alpha1-1551-g381149fb01` running PX4 SITL + Gazebo Harmonic.
 - `ros`: ROS 2 Humble development image containing MAVROS, `ros_gzharmonic`, OctoMap, RViz, OpenCV, Ultralytics, and this workspace.
 
 Both use host networking so MAVLink UDP and Gazebo Transport discovery stay simple and deterministic on Linux.
+
+> **Docker image note (validated 2026-10-19):** Docker Hub did not resolve the plain `px4io/px4-sitl-gazebo:v1.17.0` tag during runtime validation. This repository therefore pins the published snapshot `px4io/px4-sitl-gazebo:v1.17.0-alpha1-1551-g381149fb01`. The exact simulator version used for recorded results should always be reported.
 
 ### 1. Build the image and ROS workspace
 
@@ -145,7 +147,7 @@ Full Docker details, reset instructions, RViz, environment overrides, and VS Cod
 
 ## Native Ubuntu workflow (optional)
 
-If you intentionally want a non-Docker setup, use Ubuntu 22.04 + ROS 2 Humble and install PX4 v1.17 / Gazebo Harmonic on the host. The existing `install_deps.sh` remains available for that workflow. Docker is the recommended path for this repository because it keeps the host clean and pins the PX4 simulator image to v1.17.0.
+If you intentionally want a non-Docker setup, use Ubuntu 22.04 + ROS 2 Humble and install PX4 / Gazebo Harmonic on the host. The existing `install_deps.sh` remains available for that workflow. Docker is the recommended path for this repository because it keeps the host clean and pins the PX4 simulator image to `v1.17.0-alpha1-1551-g381149fb01`.
 
 ## Mission behavior
 

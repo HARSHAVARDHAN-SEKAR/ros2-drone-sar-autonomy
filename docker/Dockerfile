@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
       build-essential git bash-completion \
-      python3-colcon-common-extensions python3-rosdep python3-pip python3-pytest python3-yaml \
+      python3-colcon-common-extensions python3-rosdep python3-pip python3-venv python3-pytest python3-yaml \
       python3-numpy python3-opencv \
       geographiclib-tools \
       ros-humble-mavros ros-humble-mavros-extras \
@@ -31,8 +31,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       ros-humble-image-transport \
     && source /opt/ros/humble/setup.bash \
     && ros2 run mavros install_geographiclib_datasets.sh \
-    && python3 -m pip install --no-cache-dir --upgrade pip \
-    && python3 -m pip install --no-cache-dir "numpy>=1.23,<2" "ultralytics>=8.2,<9" \
+    && python3 -m venv --system-site-packages /opt/venv \
+    && /opt/venv/bin/python -m pip install --no-cache-dir --upgrade pip wheel \
+    && /opt/venv/bin/python -m pip install --no-cache-dir "numpy>=1.23,<2" \
+    && /opt/venv/bin/python -m pip install --no-cache-dir --index-url https://download.pytorch.org/whl/cpu torch torchvision \
+    && /opt/venv/bin/python -m pip install --no-cache-dir "ultralytics>=8.2,<9" \
     && rm -rf /var/lib/apt/lists/* /root/.cache/pip
 
 # Match the host UID/GID so bind-mounted workspace files remain owned by the user.
@@ -49,7 +52,9 @@ RUN if getent group "${USER_GID}" >/dev/null; then \
 COPY docker/entrypoint.sh /usr/local/bin/drone-entrypoint
 RUN chmod +x /usr/local/bin/drone-entrypoint
 
-ENV ROS_DISTRO=humble \
+ENV PATH=/opt/venv/bin:$PATH \
+    VIRTUAL_ENV=/opt/venv \
+    ROS_DISTRO=humble \
     ROS_DOMAIN_ID=42 \
     RCUTILS_COLORIZED_OUTPUT=1 \
     QT_X11_NO_MITSHM=1 \

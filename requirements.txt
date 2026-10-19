@@ -1,3 +1,4 @@
+# Installed inside /opt/venv by docker/Dockerfile for ROS/Python isolation.
 # Keep NumPy on the 1.x ABI for ROS 2 Humble cv_bridge compatibility.
 numpy>=1.23,<2
 ultralytics>=8.2,<9
