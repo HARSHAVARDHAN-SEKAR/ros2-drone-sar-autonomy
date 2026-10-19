@@ -33,6 +33,7 @@ class FrontierExplorer(Node):
     def __init__(self):
         super().__init__('frontier_explorer')
         self.declare_parameter('flight_altitude_m', 2.5)
+        self.declare_parameter('exploration_radius_m', 15.0)
         self.declare_parameter('inflation_radius_m', 0.65)
         self.declare_parameter('min_frontier_cells', 6)
         self.declare_parameter('min_frontier_distance_m', 1.0)
@@ -42,6 +43,7 @@ class FrontierExplorer(Node):
         self.declare_parameter('empty_frontier_cycles_to_complete', 5)
 
         self._altitude = float(self.get_parameter('flight_altitude_m').value)
+        self._radius = float(self.get_parameter('exploration_radius_m').value)
         self._inflation_m = float(self.get_parameter('inflation_radius_m').value)
         self._min_frontier = int(self.get_parameter('min_frontier_cells').value)
         self._min_distance_m = float(self.get_parameter('min_frontier_distance_m').value)
@@ -52,6 +54,7 @@ class FrontierExplorer(Node):
         self._enabled = False
         self._map: OccupancyGrid | None = None
         self._pose: PoseStamped | None = None
+        self._home_xy: tuple[float, float] | None = None
         self._empty_cycles = 0
         self._completion_sent = False
 
@@ -71,6 +74,11 @@ class FrontierExplorer(Node):
 
     def _on_pose(self, msg: PoseStamped):
         self._pose = msg
+        if self._home_xy is None:
+            self._home_xy = (
+                msg.pose.position.x,
+                msg.pose.position.y,
+            )
 
     def _on_enable(self, msg: Bool):
         self._enabled = bool(msg.data)
@@ -97,6 +105,27 @@ class FrontierExplorer(Node):
             self._pose.pose.position.x, self._pose.pose.position.y, ox, oy, res)
         radius_cells = int(math.ceil(self._inflation_m / res))
         blocked = inflate_obstacles(grid, radius_cells)
+
+        # Restrict exploration to a fixed radius around the mission home
+        # position. Without this, a frontier planner operating over an open
+        # world can keep expanding its map indefinitely.
+        if self._radius > 0.0 and self._home_xy is not None:
+            hx, hy = self._home_xy
+
+            xs = ox + (
+                np.arange(info.width, dtype=np.float64) + 0.5
+            ) * res
+            ys = oy + (
+                np.arange(info.height, dtype=np.float64) + 0.5
+            ) * res
+
+            search_roi = (
+                (xs[None, :] - hx) ** 2
+                + (ys[:, None] - hy) ** 2
+            ) <= self._radius ** 2
+
+            blocked = blocked | ~search_roi
+
         start = nearest_free_cell(grid, start_raw, blocked)
         if start is None:
             self.get_logger().debug('No known-free cell near current vehicle position yet.')

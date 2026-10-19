@@ -15,6 +15,7 @@ services:
       GZ_PARTITION: ${GZ_PARTITION:-drone_sar}
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ./simulation:/workspace/simulation:ro
       - px4_state:/root/.local/share
 
   ros:

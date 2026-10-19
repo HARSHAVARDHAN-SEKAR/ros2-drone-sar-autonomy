@@ -45,6 +45,7 @@ class KnownVictim:
     y: float
     z: float
     last_seen: float
+    last_published: float = 0.0
 
 
 class VictimDetector(Node):
@@ -57,6 +58,7 @@ class VictimDetector(Node):
         self.declare_parameter('min_depth', 0.25)
         self.declare_parameter('max_depth', 8.0)
         self.declare_parameter('dedup_radius_m', 1.25)
+        self.declare_parameter('detection_republish_s', 2.0)
         self.declare_parameter('world_frame', 'map')
         self.declare_parameter('camera_frame', 'camera_optical_frame')
         self.declare_parameter('device', '')
@@ -67,6 +69,10 @@ class VictimDetector(Node):
         self._min_depth = float(self.get_parameter('min_depth').value)
         self._max_depth = float(self.get_parameter('max_depth').value)
         self._dedup = float(self.get_parameter('dedup_radius_m').value)
+        self._republish = max(
+            0.1,
+            float(self.get_parameter('detection_republish_s').value),
+        )
         self._world = str(self.get_parameter('world_frame').value)
         self._camera = str(self.get_parameter('camera_frame').value)
         self._device = str(self.get_parameter('device').value)
@@ -140,14 +146,27 @@ class VictimDetector(Node):
                     if world is not None:
                         victim, is_new = self._associate(world)
                         label = f'candidate#{victim.victim_id} {conf:.2f} {distance:.1f}m'
-                        if is_new:
+                        now = time.monotonic()
+                        publish_due = (
+                            is_new
+                            or now - victim.last_published >= self._republish
+                        )
+
+                        if publish_due:
                             self._publish_detection(
                                 victim.victim_id, conf, distance, world,
-                                rgb, x1, y1, x2, y2, rgb_msg.header.stamp)
+                                rgb, x1, y1, x2, y2,
+                                rgb_msg.header.stamp,
+                            )
+                            victim.last_published = now
+
+                        if is_new:
                             self.get_logger().warn(
                                 f'New victim candidate #{victim.victim_id} at '
-                                f'({world.pose.position.x:.1f}, {world.pose.position.y:.1f}, '
-                                f'{world.pose.position.z:.1f}) m, confidence={conf:.2f}.')
+                                f'({world.pose.position.x:.1f}, '
+                                f'{world.pose.position.y:.1f}, '
+                                f'{world.pose.position.z:.1f}) m, '
+                                f'confidence={conf:.2f}.')
 
                 cv2.rectangle(annotated, (x1, y1), (x2, y2), (0, 255, 0), 2)
                 cv2.putText(

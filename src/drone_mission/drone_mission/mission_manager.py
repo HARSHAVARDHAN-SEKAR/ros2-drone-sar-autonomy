@@ -26,12 +26,14 @@ class MissionManager(Node):
         self.declare_parameter('takeoff_altitude_m', 2.5)
         self.declare_parameter('takeoff_tolerance_m', 0.30)
         self.declare_parameter('inspection_hold_s', 4.0)
+        self.declare_parameter('target_victim_count', 1)
         self.declare_parameter('exploration_timeout_s', 300.0)
         self.declare_parameter('mission_timeout_s', 420.0)
 
         self._takeoff_alt = float(self.get_parameter('takeoff_altitude_m').value)
         self._takeoff_tol = float(self.get_parameter('takeoff_tolerance_m').value)
         self._inspect_s = float(self.get_parameter('inspection_hold_s').value)
+        self._target_victims = max(1, int(self.get_parameter('target_victim_count').value))
         self._explore_timeout = float(self.get_parameter('exploration_timeout_s').value)
         self._mission_timeout = float(self.get_parameter('mission_timeout_s').value)
 
@@ -118,6 +120,11 @@ class MissionManager(Node):
         self.get_logger().info('Mission started: TAKEOFF.')
 
     def _on_victim(self, msg: VictimDetection):
+        # Only mission-time detections count. The detector may already see
+        # actors while the vehicle is still IDLE / TAKEOFF.
+        if self._state != MissionState.EXPLORE:
+            return
+
         victim_id = int(msg.victim_id)
         if victim_id <= 0 or victim_id in self._unique_victims:
             return
@@ -172,10 +179,18 @@ class MissionManager(Node):
         elif self._state == MissionState.INSPECT:
             if self._inspect_until is not None and now >= self._inspect_until:
                 self._inspect_until = None
-                self._state = MissionState.EXPLORE
-                self._detail = 'inspection hold complete; exploration resumed'
-                self._enable_exploration(True)
-                self.get_logger().info('Inspection complete: EXPLORE resumed.')
+
+                if len(self._unique_victims) >= self._target_victims:
+                    self._begin_return(
+                        f'target victim count reached '
+                        f'({len(self._unique_victims)}/{self._target_victims})'
+                    )
+                else:
+                    self._state = MissionState.EXPLORE
+                    self._detail = 'inspection hold complete; exploration resumed'
+                    self._enable_exploration(True)
+                    self.get_logger().info(
+                        'Inspection complete: EXPLORE resumed.')
 
         elif self._state in (MissionState.RETURN, MissionState.LAND, MissionState.ABORT):
             if not self._mav.armed and self._mission_started is not None:

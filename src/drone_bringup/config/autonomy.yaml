@@ -15,14 +15,16 @@ mission_manager:
     auto_start: false
     takeoff_altitude_m: 2.5
     takeoff_tolerance_m: 0.30
-    inspection_hold_s: 4.0
-    exploration_timeout_s: 300.0
-    mission_timeout_s: 420.0
+    inspection_hold_s: 6.0
+    target_victim_count: 1
+    exploration_timeout_s: 120.0
+    mission_timeout_s: 180.0
 
 frontier_explorer:
   ros__parameters:
     use_sim_time: true
     flight_altitude_m: 2.5
+    exploration_radius_m: 15.0
     inflation_radius_m: 0.65
     min_frontier_cells: 3
     min_frontier_distance_m: 1.0
@@ -35,12 +37,13 @@ victim_detector:
   ros__parameters:
     use_sim_time: true
     model_path: yolov8n.pt
-    confidence: 0.65
+    confidence: 0.45
     iou: 0.45
     depth_roi_px: 8
     min_depth: 0.25
     max_depth: 8.0
     dedup_radius_m: 1.25
+    detection_republish_s: 2.0
     world_frame: map
     camera_frame: camera_optical_frame
     device: ''
