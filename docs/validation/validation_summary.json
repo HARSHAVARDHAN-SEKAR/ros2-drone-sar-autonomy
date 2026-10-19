@@ -1,0 +1,28 @@
+{
+  "validation_date": "2026-10-19",
+  "mission_complete_elapsed_s": 124.59760284423828,
+  "transition_times_s": {
+    "TAKEOFF": 1.4810055494308472,
+    "EXPLORE": 26.38650894165039,
+    "INSPECT": 77.42707824707031,
+    "RETURN": 83.81452941894531,
+    "COMPLETE": 124.59760284423828
+  },
+  "unique_victims": 1,
+  "frontier_plan_count_before_detection": 7,
+  "frontier_grid_cells_min": 9,
+  "frontier_grid_cells_max": 44,
+  "frontier_grid_cells_mean": 28.285714285714285,
+  "latest_detection_count": 2,
+  "detection_confidence_mean": 0.8951460123062134,
+  "detection_confidence_min": 0.8825399279594421,
+  "detection_confidence_max": 0.9077520966529846,
+  "detection_distance_mean_m": 7.98040509223938,
+  "video_duration_s": 107.699393,
+  "video_resolution": "1920x1080",
+  "notes": [
+    "YOLO confidence is model confidence, not an accuracy metric.",
+    "Mission timing is based on /mission/state elapsed_sec.",
+    "Frontier path counts are parsed from the recorded launch log."
+  ]
+}

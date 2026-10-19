@@ -1,0 +1,6 @@
+state,elapsed_sec,detail,unique_victims
+TAKEOFF,1.4810055494308472,operator START,0
+EXPLORE,26.38650894165039,takeoff complete; frontier exploration active,0
+INSPECT,77.42707824707031,'inspecting victim candidate #1',1
+RETURN,83.81452941894531,target victim count reached (1/1),1
+COMPLETE,124.59760284423828,mission complete with 1 unique victim candidate(s),1
